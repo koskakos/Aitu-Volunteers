@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: 158f15f3-83e0-4906-824c-69bdc50d9d61
+        credential:
+          client-id: 8e43eadc-4f43-4434-b074-7dd9b8d46468
+          client-secret: OHk8Q~3T8exgtRx4bgkp6Xrqv4ryPYsnBb5FEaPW
+        app-id-uri: api://8e43eadc-4f43-4434-b074-7dd9b8d46468
+
+#          9f15860b-4243-4610-845e-428dc4ae43a
+
