@@ -1,7 +1,8 @@
 package com.aitu.volunteers.controller;
 
+import com.aitu.volunteers.model.request.UserRegistrationRequest;
+import com.aitu.volunteers.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,10 +12,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -24,6 +23,12 @@ public class AuthorizationController {
 
     @Value("${spring.cloud.azure.active-directory.credential.client-secret}")
     private String clientSecret;
+
+    private final UserService userService;
+
+    public AuthorizationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String code) throws URISyntaxException {
@@ -45,5 +50,10 @@ public class AuthorizationController {
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
         return response;
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<?> registration(@RequestBody UserRegistrationRequest request) {
+        return ResponseEntity.ok(userService.saveUser(userService.getAuthorizedUserSub(), request));
     }
 }
