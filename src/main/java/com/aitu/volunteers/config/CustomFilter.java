@@ -44,7 +44,7 @@ public class CustomFilter extends OncePerRequestFilter {
         String sub = (String) principal.getClaims().get("sub");
 
         if (!userService.isExistsUserByUserSub(sub)) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
             response.getOutputStream().println(new ObjectMapper().
                     writeValueAsString("Not registered"));
