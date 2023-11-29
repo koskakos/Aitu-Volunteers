@@ -33,6 +33,6 @@ public class UserInfo {
     @Column(name = "user_IIN", unique = true, length = 12)
     private String IIN;
 
-    @Column(name = "user_phone", nullable = false)
+    @Column(name = "user_phone", nullable = false, length = 15)
     private String phone;
 }
