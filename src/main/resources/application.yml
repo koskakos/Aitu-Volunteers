@@ -11,4 +11,11 @@ spring:
         app-id-uri: api://8e43eadc-4f43-4434-b074-7dd9b8d46468
 
 #          9f15860b-4243-4610-845e-428dc4ae43a
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aituVolunteers
+    username: postgres
+    password: 12345678
 
+  jpa:
+    hibernate:
+      ddl-auto: create
