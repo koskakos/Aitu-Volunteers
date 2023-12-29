@@ -27,6 +27,10 @@ public class UserService {
         return userRepository.findUserByUserSub(sub).orElseThrow();
     }
 
+    public User getUser(Long id) {
+        return userRepository.findUserById(id).orElseThrow();
+    }
+
     public User saveUser(String sub, UserRegistrationRequest request) {
         User user = User.builder().userSub(sub)
                 .userInfo(UserInfo.builder()

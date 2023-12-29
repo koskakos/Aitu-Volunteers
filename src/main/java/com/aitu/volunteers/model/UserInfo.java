@@ -12,27 +12,27 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users_info")
+@Table(name = "user_info")
 public class UserInfo {
 
     @JsonIgnore
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "user_firstname", nullable = false, length = 15)
+    @Column(name = "firstname", nullable = false, length = 15)
     private String firstname;
 
-    @Column(name = "user_lastname", nullable = false, length = 20)
+    @Column(name = "lastname", nullable = false, length = 20)
     private String lastname;
 
-    @Column(name = "user_gender", nullable = false)
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @Column(name = "user_IIN", unique = true, length = 12)
+    @Column(name = "IIN", unique = true, length = 12)
     private String IIN;
 
-    @Column(name = "user_phone", nullable = false, length = 15)
+    @Column(name = "phone", nullable = false, length = 15)
     private String phone;
 }

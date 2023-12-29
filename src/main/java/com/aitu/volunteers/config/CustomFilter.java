@@ -44,6 +44,7 @@ public class CustomFilter extends OncePerRequestFilter {
         String sub = (String) principal.getClaims().get("sub");
 
         if (!userService.isExistsUserByUserSub(sub)) {
+            response.addHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
             response.getOutputStream().println(new ObjectMapper().

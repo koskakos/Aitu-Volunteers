@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 //@PreAuthorize("hasAnyAuthority('ROLE_USER','APPROLE_Admin')")
-public class HelloController {
+public class TestController {
 
     private final UserService userService;
 

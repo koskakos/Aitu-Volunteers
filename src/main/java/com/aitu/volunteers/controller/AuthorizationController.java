@@ -2,6 +2,7 @@ package com.aitu.volunteers.controller;
 
 import com.aitu.volunteers.model.request.UserRegistrationRequest;
 import com.aitu.volunteers.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,18 +18,17 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthorizationController {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final UserService userService;
 
     @Value("${spring.cloud.azure.active-directory.credential.client-secret}")
     private String clientSecret;
 
-    private final UserService userService;
-
-    public AuthorizationController(UserService userService) {
-        this.userService = userService;
-    }
+    @Value("${frontend.uri}")
+    private String redirectUri;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String code) throws URISyntaxException {
@@ -41,11 +41,11 @@ public class AuthorizationController {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         map.add("grant_type", "authorization_code");
         map.add("client_id", "8e43eadc-4f43-4434-b074-7dd9b8d46468");
-        map.add("redirect_uri", "http://localhost:3000/login");
+        map.add("redirect_uri", redirectUri);
         map.add("client_secret", clientSecret);
         map.add("code", code);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
