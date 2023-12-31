@@ -21,4 +21,11 @@ spring:
       ddl-auto: update
 
 frontend:
-  uri: "http://localhost:3000/login"
+  uri:
+    redirect: "http://localhost:3000/login"
+
+image:
+  storage:
+    location: "C:/Users/koskakos/IdeaProjects/Ultimate/portfolio/aitu-volunteers/src/main/resources/static"
+
+url: 'http://localhost:8080'

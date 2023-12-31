@@ -57,7 +57,6 @@ public class CustomFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-//        System.out.println(path);
-        return path.startsWith("/api/v1/auth");
+        return path.startsWith("/api/v1/auth") || path.startsWith("/files");
     }
 }

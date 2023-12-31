@@ -27,7 +27,7 @@ public class AuthorizationController {
     @Value("${spring.cloud.azure.active-directory.credential.client-secret}")
     private String clientSecret;
 
-    @Value("${frontend.uri}")
+    @Value("${frontend.uri.redirect}")
     private String redirectUri;
 
     @PostMapping("/login")

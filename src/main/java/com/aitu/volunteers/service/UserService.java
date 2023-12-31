@@ -48,4 +48,8 @@ public class UserService {
         return  (String) principal.getClaims().get("sub");
     }
 
+    public User getAuthorizedUser() {
+        return getUser(getAuthorizedUserSub());
+    }
+
 }
