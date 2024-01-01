@@ -28,7 +28,7 @@ public class ImageController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/files/")
+    @PostMapping("/api/v1/post/upload-image")
     @PreAuthorize("hasAuthority('APPROLE_Admin')")
     public ResponseEntity<?> uploadPostImage(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(imageService.storePostImage(file, userService.getAuthorizedUser()));

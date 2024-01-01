@@ -30,7 +30,7 @@ public class AadOAuth2ResourceServerSecurityConfig {
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).cors(withDefaults()).
-                authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**", "/error", "/api/v1/user/confirmemail", "/login", "/files/**")
+                authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**", "/error", "/api/v1/user/confirmemail", "/login", "/files/**", "/api/v1/post/**")
                         .permitAll().anyRequest().authenticated())
                 .addFilterAfter(new CustomFilter(userService), BasicAuthenticationFilter.class).
                 apply(AadResourceServerHttpSecurityConfigurer.aadResourceServer());
