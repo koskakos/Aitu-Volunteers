@@ -42,13 +42,16 @@ public class TeamSerializer extends StdSerializer<Team> {
         jgen.writeFieldName("members");
         jgen.writeStartArray();
 
-        team.getMembers().forEach((m) -> {
-            try {
-                jgen.writeObject(new Member(m));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        if(team.getMembers() != null) {
+            team.getMembers().forEach((m) -> {
+                try {
+                    jgen.writeObject(new Member(m));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
         jgen.writeEndArray();
 
         jgen.writeEndObject();

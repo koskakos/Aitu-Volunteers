@@ -35,13 +35,16 @@ public class UserSerializer extends StdSerializer<User> {
 
         jgen.writeFieldName("teams");
         jgen.writeStartArray();
-        user.getTeams().forEach((t) -> {
-            try {
-                jgen.writeObject(new CustomTeam(t));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        if(user.getTeams() != null) {
+            user.getTeams().forEach((t) -> {
+                try {
+                    jgen.writeObject(new CustomTeam(t));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
         jgen.writeEndArray();
         
         jgen.writeEndObject();
