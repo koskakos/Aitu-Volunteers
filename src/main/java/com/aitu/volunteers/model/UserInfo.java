@@ -21,18 +21,18 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "firstname", nullable = false, length = 15)
+    @Column(name = "firstname", length = 15)
     private String firstname;
 
-    @Column(name = "lastname", nullable = false, length = 20)
+    @Column(name = "lastname", length = 20)
     private String lastname;
 
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
     private Gender gender;
 
     @Column(name = "IIN", unique = true, length = 12)
     private String IIN;
 
-    @Column(name = "phone", nullable = false, length = 15)
+    @Column(name = "phone", length = 15)
     private String phone;
 }

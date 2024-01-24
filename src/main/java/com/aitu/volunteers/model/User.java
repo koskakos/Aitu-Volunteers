@@ -27,6 +27,12 @@ public class User {
     @Column(name = "sub", unique = true, nullable = false, length = 70)
     private String userSub;
 
+    @Column(name = "barcode", unique = true, nullable = false, length = 40)
+    private String barcode;
+
+    @Column(name = "is_registered")
+    private boolean isRegistered;
+
     @MapsId
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
