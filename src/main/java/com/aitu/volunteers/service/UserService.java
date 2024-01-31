@@ -28,6 +28,10 @@ public class UserService {
         return userRepository.existsByUserSub(sub);
     }
 
+    public boolean isRegisteredByUserSub(String sub) {
+        return getUser(sub).isRegistered();
+    }
+
     public User getUser(String sub) {
         return userRepository.findUserByUserSub(sub).orElseThrow();
     }
