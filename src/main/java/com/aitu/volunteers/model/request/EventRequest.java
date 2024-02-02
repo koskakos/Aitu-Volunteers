@@ -2,6 +2,7 @@ package com.aitu.volunteers.model.request;
 
 import com.aitu.volunteers.model.EventCategory;
 import com.aitu.volunteers.model.EventResponsibility;
+import com.aitu.volunteers.model.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +27,5 @@ public class EventRequest {
     private Boolean hasMeal;
     private String dresscode;
     private List<EventResponsibility> responsibilities = new LinkedList<>();
-
+    private EventRequirementRequest requirement;
 }

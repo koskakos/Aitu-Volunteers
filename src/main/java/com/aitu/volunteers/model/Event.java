@@ -20,7 +20,7 @@ public class Event {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "title")
@@ -59,4 +59,9 @@ public class Event {
     @Enumerated
     @ElementCollection(targetClass = EventResponsibility.class, fetch = FetchType.EAGER)
     private List<EventResponsibility> responsibilities;
+
+    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private EventRequirement requirement;
 }
