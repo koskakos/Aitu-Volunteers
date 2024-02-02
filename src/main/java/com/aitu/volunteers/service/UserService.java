@@ -4,18 +4,13 @@ import com.aitu.volunteers.model.User;
 import com.aitu.volunteers.model.UserInfo;
 import com.aitu.volunteers.model.request.UpdateUserRequest;
 import com.aitu.volunteers.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,15 +24,18 @@ public class UserService {
     }
 
     public boolean isRegisteredByUserSub(String sub) {
-        return getUser(sub).isRegistered();
+        return getUserBySub(sub).isRegistered();
     }
 
-    public User getUser(String sub) {
+    public User getUserBySub(String sub) {
         return userRepository.findUserByUserSub(sub).orElseThrow();
     }
 
-    public User getUser(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findUserById(id).orElseThrow();
+    }
+    public User getUserByBarcode(String barcode) {
+        return userRepository.findUserByBarcode(barcode).orElseThrow();
     }
 
     public User createNewUser(JSONObject accessTokenPayload) {
@@ -68,7 +66,7 @@ public class UserService {
     }
 
     public User updateUser(String userSub, UpdateUserRequest request) {
-        User user = getUser(userSub);
+        User user = getUserBySub(userSub);
         setUserInfoFromUpdateUserRequest(user, request);
         return userRepository.save(user);
     }
@@ -79,7 +77,7 @@ public class UserService {
     }
 
     public User getAuthorizedUser() {
-        return getUser(getAuthorizedUserSub());
+        return getUserBySub(getAuthorizedUserSub());
     }
 
 }

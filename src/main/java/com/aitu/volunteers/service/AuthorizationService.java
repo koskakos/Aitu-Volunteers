@@ -75,7 +75,7 @@ public class AuthorizationService {
     }
 
     public User registration(String userSub, UpdateUserRequest request) {
-        User user = userService.getUser(userSub);
+        User user = userService.getUserBySub(userSub);
         if(user.isRegistered()) return null;
         user.setRegistered(true);
         return userService.updateUser(user, request);

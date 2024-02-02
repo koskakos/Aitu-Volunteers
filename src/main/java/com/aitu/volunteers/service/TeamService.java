@@ -4,7 +4,6 @@ import com.aitu.volunteers.model.Team;
 import com.aitu.volunteers.model.User;
 import com.aitu.volunteers.model.request.CreateTeamRequest;
 import com.aitu.volunteers.repository.TeamRepository;
-import com.aitu.volunteers.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +25,14 @@ public class TeamService {
         Team team = Team.builder()
                 .title(teamRequest.getTitle())
                 .description(teamRequest.getDescription())
-                .leader(userService.getUser(teamRequest.getLeaderId()))
+                .leader(userService.getUserById(teamRequest.getLeaderId()))
                 .build();
         return teamRepository.save(team);
     }
 
     public Team addMemberToTeam(Long userId, Long teamId) {
         Team team = getTeamById(teamId);
-        User user = userService.getUser(userId);
+        User user = userService.getUserById(userId);
         team.getMembers().add(user);
         return teamRepository.save(team);
     }

@@ -1,17 +1,13 @@
 package com.aitu.volunteers.controller;
 
 import com.aitu.volunteers.service.UserService;
-import com.azure.core.annotation.Get;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,6 +42,11 @@ public class TestController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUser(HttpServletRequest httpServletRequest) {
-        return ResponseEntity.ok(userService.getUser(httpServletRequest.getUserPrincipal().getName()));
+        return ResponseEntity.ok(userService.getUserBySub(httpServletRequest.getUserPrincipal().getName()));
+    }
+
+    @GetMapping("/user/{barcode}")
+    public ResponseEntity<?> getUserByBarcode(@PathVariable String barcode) {
+        return ResponseEntity.ok(userService.getUserByBarcode(barcode));
     }
 }
