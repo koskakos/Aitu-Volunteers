@@ -18,4 +18,28 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+frontend:
+  uri:
+    redirect: "http://localhost:3000/login"
+
+image:
+  storage:
+    location: "C:/Users/koskakos/IdeaProjects/Ultimate/portfolio/aitu-volunteers/src/main/resources/static"
+
+url: 'http://localhost:8080'

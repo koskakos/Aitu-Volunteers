@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegistrationRequest {
+public class UpdateUserRequest {
     private String firstname;
     private String lastname;
     private Gender gender;

@@ -1,6 +1,5 @@
 package com.aitu.volunteers.config;
 
-import com.aitu.volunteers.repository.UserRepository;
 import com.aitu.volunteers.service.UserService;
 import com.azure.spring.cloud.autoconfigure.implementation.aad.security.AadResourceServerHttpSecurityConfigurer;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,9 @@ public class AadOAuth2ResourceServerSecurityConfig {
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).cors(withDefaults()).
-                authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**", "/error", "/api/v1/user/confirmemail", "/login")
+                authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**", "/error", "/api/v1/user/confirmemail", "/login", "/files/**", "/api/v1/post/**", "/actuator/**")
                         .permitAll().anyRequest().authenticated())
-                .addFilterAfter(new CustomFilter(userService), BasicAuthenticationFilter.class).
+                .addFilterAfter(new RegistrationFilter(userService), BasicAuthenticationFilter.class).
                 apply(AadResourceServerHttpSecurityConfigurer.aadResourceServer());
         return http.build();
     }
