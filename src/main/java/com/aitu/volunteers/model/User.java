@@ -38,6 +38,10 @@ public class User {
     @JoinColumn(name = "id")
     private UserInfo userInfo;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "certificate_id", referencedColumnName = "id")
+    private UserCertificate certificate;
+
     @ManyToMany(targetEntity = Team.class, mappedBy = "members", cascade = CascadeType.ALL)
     private List<Team> teams = new LinkedList<>();
 }

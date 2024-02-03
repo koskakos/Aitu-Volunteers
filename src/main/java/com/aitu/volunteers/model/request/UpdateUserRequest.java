@@ -16,4 +16,7 @@ public class UpdateUserRequest {
     private Gender gender;
     private String IIN;
     private String phone;
+    private Byte kazakh;
+    private Byte russian;
+    private Byte english;
 }

@@ -38,7 +38,7 @@ frontend:
   uri:
     redirect: "http://localhost:3000/login"
 
-image:
+file:
   storage:
     location: "C:/Users/koskakos/IdeaProjects/Ultimate/portfolio/aitu-volunteers/src/main/resources/static"
 

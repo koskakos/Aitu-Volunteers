@@ -1,6 +1,6 @@
 package com.aitu.volunteers.controller;
 
-import com.aitu.volunteers.service.ImageService;
+import com.aitu.volunteers.service.StorageService;
 import com.aitu.volunteers.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -12,14 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-public class ImageController {
+public class StorageController {
 
-    private final ImageService imageService;
+    private final StorageService storageService;
     private final UserService userService;
 
     @GetMapping("/files/{userSub}/{filename:.+}")
     public ResponseEntity<Resource> servePostImage(@PathVariable String filename, @PathVariable String userSub) {
-        Resource file = imageService.loadPostImageAsResource(userSub, filename);
+        Resource file = storageService.loadPostImageAsResource(userSub, filename);
 
         if (file == null)
             return ResponseEntity.notFound().build();
@@ -31,6 +31,6 @@ public class ImageController {
     @PostMapping("/api/v1/post/upload-image")
     @PreAuthorize("hasAuthority('APPROLE_Admin')")
     public ResponseEntity<?> uploadPostImage(@RequestParam("file") MultipartFile file) {
-        return ResponseEntity.ok(imageService.storePostImage(file, userService.getAuthorizedUser()));
+        return ResponseEntity.ok(storageService.storePostImage(userService.getAuthorizedUser(), file));
     }
 }

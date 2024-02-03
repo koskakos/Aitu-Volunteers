@@ -49,4 +49,9 @@ public class TestController {
     public ResponseEntity<?> getUserByBarcode(@PathVariable String barcode) {
         return ResponseEntity.ok(userService.getUserByBarcode(barcode));
     }
+
+    @GetMapping("/tests")
+    public ResponseEntity<?> getgad() {
+        return ResponseEntity.ok(userService.getAuthorizedUser().getCertificate());
+    }
 }

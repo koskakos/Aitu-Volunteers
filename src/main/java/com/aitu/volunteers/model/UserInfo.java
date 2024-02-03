@@ -30,6 +30,15 @@ public class UserInfo {
     @Column(name = "gender")
     private Gender gender;
 
+    @Column(name = "kazakh")
+    private Byte kazakh;
+
+    @Column(name = "russian")
+    private Byte russian;
+
+    @Column(name = "english")
+    private Byte english;
+
     @Column(name = "IIN", unique = true, length = 12)
     private String IIN;
 

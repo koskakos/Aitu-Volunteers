@@ -34,6 +34,13 @@ public class UserSerializer extends StdSerializer<User> {
         jgen.writeStringField("gender", user.getUserInfo().getGender().toString());
         jgen.writeStringField("barcode", user.getBarcode());
 
+        jgen.writeNumberField("kazakh", user.getUserInfo().getKazakh());
+        jgen.writeNumberField("russian", user.getUserInfo().getRussian());
+        jgen.writeNumberField("english", user.getUserInfo().getEnglish());
+
+        if(user.getCertificate() != null)
+            jgen.writeBooleanField("isCertificateApproved", user.getCertificate().getIsApproved());
+
         jgen.writeFieldName("teams");
         jgen.writeStartArray();
         if(user.getTeams() != null) {

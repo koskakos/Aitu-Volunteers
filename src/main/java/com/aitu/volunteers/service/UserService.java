@@ -1,14 +1,17 @@
 package com.aitu.volunteers.service;
 
 import com.aitu.volunteers.model.User;
+import com.aitu.volunteers.model.UserCertificate;
 import com.aitu.volunteers.model.UserInfo;
 import com.aitu.volunteers.model.request.UpdateUserRequest;
+import com.aitu.volunteers.repository.UserCertificateRepository;
 import com.aitu.volunteers.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.NoSuchElementException;
 
@@ -17,6 +20,10 @@ import java.util.NoSuchElementException;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final StorageService storageService;
+
+    private final UserCertificateRepository userCertificateRepository;
 
 
     public boolean isExistsUserByUserSub(String sub) {
@@ -52,11 +59,14 @@ public class UserService {
 
     private void setUserInfoFromUpdateUserRequest(User user, UpdateUserRequest request) {
         user.setUserInfo(UserInfo.builder()
-                        .id(user.getUserInfo().getId())
+                .id(user.getUserInfo().getId())
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .gender(request.getGender())
                 .IIN(request.getIIN())
+                .kazakh(request.getKazakh())
+                .russian(request.getRussian())
+                .english(request.getEnglish())
                 .phone(request.getPhone()).build());
     }
 
@@ -68,6 +78,36 @@ public class UserService {
     public User updateUser(String userSub, UpdateUserRequest request) {
         User user = getUserBySub(userSub);
         setUserInfoFromUpdateUserRequest(user, request);
+        return userRepository.save(user);
+    }
+
+    public User toggleApproveCertificate(User user) {
+        if(user.getCertificate() == null) return null;
+        user.getCertificate().setIsApproved(!user.getCertificate().getIsApproved());
+        return userRepository.save(user);
+    }
+
+    public User deleteCertificate(User user) {
+        UserCertificate userCertificate = user.getCertificate();
+        if(userCertificate == null) {
+            return null;
+        }
+        storageService.deleteUserCertificate(user);
+        userCertificateRepository.delete(userCertificate);
+        user.setCertificate(null);
+        return userRepository.save(user);
+    }
+
+    public User uploadCertificate(User user, MultipartFile certificate) {
+        if(user.getCertificate() != null) {
+            return null;
+        }
+        String certificateUrl = storageService.storeUserCertificate(user, certificate);
+        if(certificateUrl == null) return null;
+        user.setCertificate(UserCertificate.builder()
+                    .certificateUrl(certificateUrl)
+                    .isApproved(false)
+                    .build());
         return userRepository.save(user);
     }
 
