@@ -1,5 +1,6 @@
 package com.aitu.volunteers.controller;
 
+import com.aitu.volunteers.model.request.UserBanRequest;
 import com.aitu.volunteers.service.StorageService;
 import com.aitu.volunteers.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,30 @@ public class UserController {
     @PreAuthorize("hasAuthority('APPROLE_Admin')")
     public ResponseEntity<?> approveCertificate(@PathVariable Long id) {
         return ResponseEntity.ok(userService.toggleApproveCertificate(userService.getUserById(id)));
+    }
+
+    @PostMapping("/ban/{id}")
+    @PreAuthorize("hasAuthority('APPROLE_Admin')")
+    public ResponseEntity<?> banUser(@PathVariable Long id, @RequestBody UserBanRequest userBanRequest) {
+        return ResponseEntity.ok(userService.banUser(userService.getUserById(id), userBanRequest));
+    }
+
+    @DeleteMapping("/ban/{banId}")
+    @PreAuthorize("hasAuthority('APPROLE_Admin')")
+    public ResponseEntity<?> deleteBanUser(@PathVariable Long banId) {
+        userService.deleteUserBan(banId);
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/ban/{id}")
+    @PreAuthorize("hasAuthority('APPROLE_Admin')")
+    public ResponseEntity<?> allUserBan(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getAllUserBan(userService.getUserById(id)));
+    }
+
+    @GetMapping("/{userId}/has-active-ban")
+    @PreAuthorize("hasAuthority('APPROLE_Admin')")
+    public ResponseEntity<?> isUserHasActiveBan(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.hasActiveBan(userService.getUserById(userId)));
     }
 }

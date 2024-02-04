@@ -1,9 +1,12 @@
 package com.aitu.volunteers.service;
 
 import com.aitu.volunteers.model.User;
+import com.aitu.volunteers.model.UserBan;
 import com.aitu.volunteers.model.UserCertificate;
 import com.aitu.volunteers.model.UserInfo;
 import com.aitu.volunteers.model.request.UpdateUserRequest;
+import com.aitu.volunteers.model.request.UserBanRequest;
+import com.aitu.volunteers.repository.UserBanRepository;
 import com.aitu.volunteers.repository.UserCertificateRepository;
 import com.aitu.volunteers.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,6 +27,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final StorageService storageService;
+
+    private final UserBanRepository userBanRepository;
 
     private final UserCertificateRepository userCertificateRepository;
 
@@ -79,6 +86,30 @@ public class UserService {
         User user = getUserBySub(userSub);
         setUserInfoFromUpdateUserRequest(user, request);
         return userRepository.save(user);
+    }
+
+    public List<UserBan> getAllUserBan(User user) {
+        return user.getBans();
+    }
+
+    public UserBan banUser(User user, UserBanRequest userBanRequest) {
+        UserBan userBan = UserBan.builder()
+                .user(user)
+                .reason(userBanRequest.getReason())
+                .startDate(userBanRequest.getStartDate())
+                .endDate(userBanRequest.getEndDate())
+                .build();
+        user.getBans().add(userBan);
+        userRepository.save(user);
+        return userBan;
+    }
+
+    public void deleteUserBan(Long banId) {
+        userBanRepository.deleteById(banId);
+    }
+
+    public boolean hasActiveBan(User user) {
+        return userBanRepository.existsByUserAndEndDateAfter(user, LocalDateTime.now());
     }
 
     public User toggleApproveCertificate(User user) {
