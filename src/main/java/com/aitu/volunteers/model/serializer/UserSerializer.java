@@ -8,8 +8,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UserSerializer extends StdSerializer<User> {
 
@@ -20,6 +26,8 @@ public class UserSerializer extends StdSerializer<User> {
     public UserSerializer(Class<User> t) {
         super(t);
     }
+
+    private final List<String> roleIIN = List.of("APPROLE_Developer");
 
     @Override
     public void serialize(
@@ -37,6 +45,15 @@ public class UserSerializer extends StdSerializer<User> {
         jgen.writeNumberField("kazakh", user.getUserInfo().getKazakh());
         jgen.writeNumberField("russian", user.getUserInfo().getRussian());
         jgen.writeNumberField("english", user.getUserInfo().getEnglish());
+
+        if(SecurityContextHolder.getContext().getAuthentication() != null) {
+            String userSub = (String) ((Jwt) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getClaims().get("sub");
+            if(userSub.equals(user.getUserSub())
+                    || SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch((a) -> roleIIN.contains(a.toString()))) {
+                jgen.writeStringField("iin", user.getUserInfo().getIIN());
+            }
+        }
+        System.out.println();
 
         if(user.getCertificate() != null)
             jgen.writeBooleanField("isCertificateApproved", user.getCertificate().getIsApproved());

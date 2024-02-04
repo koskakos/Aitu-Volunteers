@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -29,16 +30,6 @@ public class Event {
     @Column(name = "description")
     private String description;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
-
     @ManyToOne
     @JoinColumn(name = "leader")
     private User leader;
@@ -55,6 +46,9 @@ public class Event {
     @Column(name = "dresscode")
     private String dresscode;
 
+    @Column(name = "telegram_link")
+    private String telegramLink;
+
     @Column(name = "responsibility")
     @Enumerated
     @ElementCollection(targetClass = EventResponsibility.class, fetch = FetchType.EAGER)
@@ -64,4 +58,7 @@ public class Event {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
     private EventRequirement requirement;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<EventDay> days = new LinkedList<>();
 }

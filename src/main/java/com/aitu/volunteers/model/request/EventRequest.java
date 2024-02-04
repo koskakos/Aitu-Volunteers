@@ -20,12 +20,12 @@ public class EventRequest {
     private String title;
     private String description;
     private String leaderBarcode;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
     private EventCategory category;
     private Boolean hasTransport;
     private Boolean hasMeal;
     private String dresscode;
+    private String telegramLink;
     private List<EventResponsibility> responsibilities = new LinkedList<>();
+    private List<EventDayRequest> days;
     private EventRequirementRequest requirement;
 }
