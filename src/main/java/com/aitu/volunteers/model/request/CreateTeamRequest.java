@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateTeamRequest {
     private Long leaderId;
-    private String title;
+    private String name;
     private String description;
+    private String telegramLink;
 }

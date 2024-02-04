@@ -28,13 +28,16 @@ public class Team {
     @JoinColumn(name = "leader_id", referencedColumnName = "id")
     private User leader;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(targetEntity = User.class, cascade = CascadeType.ALL)
+    @Column(name = "telegram_link")
+    private String telegramLink;
+
+    @OneToMany(mappedBy = "team")
     private List<User> members = new LinkedList<>();
 
 }

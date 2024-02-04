@@ -45,6 +45,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserBan> bans = new LinkedList<>();
 
-    @ManyToMany(targetEntity = Team.class, mappedBy = "members", cascade = CascadeType.ALL)
-    private List<Team> teams = new LinkedList<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id")
+    private Team team;
 }

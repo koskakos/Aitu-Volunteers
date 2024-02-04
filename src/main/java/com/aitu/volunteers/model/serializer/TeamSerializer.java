@@ -28,8 +28,9 @@ public class TeamSerializer extends StdSerializer<Team> {
         jgen.writeStartObject();
 
         jgen.writeNumberField("id", team.getId());
-        jgen.writeStringField("title", team.getTitle());
+        jgen.writeStringField("title", team.getName());
         jgen.writeStringField("description", team.getDescription());
+        jgen.writeStringField("telegramLink", team.getTelegramLink());
         jgen.writeFieldName("leader");
 
         jgen.writeStartObject();

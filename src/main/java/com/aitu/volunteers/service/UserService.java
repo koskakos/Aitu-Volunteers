@@ -1,9 +1,6 @@
 package com.aitu.volunteers.service;
 
-import com.aitu.volunteers.model.User;
-import com.aitu.volunteers.model.UserBan;
-import com.aitu.volunteers.model.UserCertificate;
-import com.aitu.volunteers.model.UserInfo;
+import com.aitu.volunteers.model.*;
 import com.aitu.volunteers.model.request.UpdateUserRequest;
 import com.aitu.volunteers.model.request.UserBanRequest;
 import com.aitu.volunteers.repository.UserBanRepository;
@@ -139,6 +136,11 @@ public class UserService {
                     .certificateUrl(certificateUrl)
                     .isApproved(false)
                     .build());
+        return userRepository.save(user);
+    }
+
+    public User addTeamToUser(User user, Team team) {
+        user.setTeam(team);
         return userRepository.save(user);
     }
 

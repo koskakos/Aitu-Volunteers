@@ -41,20 +41,16 @@ public class UserSerializer extends StdSerializer<User> {
         if(user.getCertificate() != null)
             jgen.writeBooleanField("isCertificateApproved", user.getCertificate().getIsApproved());
 
-        jgen.writeFieldName("teams");
-        jgen.writeStartArray();
-        if(user.getTeams() != null) {
-            user.getTeams().forEach((t) -> {
-                try {
-                    jgen.writeObject(new CustomTeam(t));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        if(user.getTeam() != null) {
+            jgen.writeFieldName("team");
+            jgen.writeStartObject();
+
+            jgen.writeStringField("name", user.getTeam().getName());
+            jgen.writeStringField("description", user.getTeam().getName());
+
+            jgen.writeEndObject();
         }
 
-        jgen.writeEndArray();
-        
         jgen.writeEndObject();
     }
     @Data
@@ -65,7 +61,7 @@ public class UserSerializer extends StdSerializer<User> {
 
         public CustomTeam(Team team) {
             this.id = team.getId();
-            this.title = team.getTitle();
+            this.title = team.getName();
             this.description = team.getDescription();
         }
     }
