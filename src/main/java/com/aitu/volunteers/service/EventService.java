@@ -1,14 +1,16 @@
 package com.aitu.volunteers.service;
 
-import com.aitu.volunteers.model.Event;
-import com.aitu.volunteers.model.EventDay;
-import com.aitu.volunteers.model.EventRequirement;
-import com.aitu.volunteers.model.User;
+import com.aitu.volunteers.model.*;
 import com.aitu.volunteers.model.request.EventRequest;
 import com.aitu.volunteers.model.request.EventRequirementRequest;
+import com.aitu.volunteers.repository.EventDayRepository;
+import com.aitu.volunteers.repository.EventRegistrationRepository;
 import com.aitu.volunteers.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +18,17 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
+    private final EventRegistrationRepository eventRegistrationRepository;
+
+    private final EventDayRepository eventDayRepository;
+
     private final UserService userService;
+
+    private final QrCodeService qrCodeService;
+
+    public EventDay getEventDayById(Long id) {
+        return eventDayRepository.findEventDayById(id).orElseThrow();
+    }
 
     public Event createEvent(EventRequest eventRequest) {
         EventRequirementRequest requirementRequest = eventRequest.getRequirement();
@@ -49,6 +61,38 @@ public class EventService {
                         .build()
         )).toList());
         return eventRepository.save(event);
+    }
+
+    public EventRegistration registerUserForEventDay(User user, EventDay eventDay) {
+        if(eventRegistrationRepository.existsByUserAndEventDay(user, eventDay)) return null;
+        if(!canUserRegisterForEvent(user, eventDay)) return null;
+        EventRegistration eventRegistration = EventRegistration.builder()
+                .registrationDate(LocalDateTime.now())
+                .user(user)
+                .eventDay(eventDay)
+                .startQr(qrCodeService.createQrCode())
+                .endQr(qrCodeService.createQrCode())
+                .build();
+        return eventRegistrationRepository.save(eventRegistration);
+    }
+
+    @Transactional
+    public void unregisterUserForEventDay(User user, EventDay eventDay) {
+        eventRegistrationRepository.deleteByUserAndEventDay(user, eventDay);
+    }
+
+    public boolean canUserRegisterForEvent(User user, EventDay eventDay) {
+        if(userService.hasActiveBan(user)) return false;
+        EventRequirement requirement = eventDay.getEvent().getRequirement();
+        UserInfo userInfo = user.getUserInfo();
+        // add age
+        return (requirement.getGender() == null || requirement.getGender() == userInfo.getGender()) &&
+                (!requirement.getIsCertificateRequired() || (user.getCertificate() != null && user.getCertificate().getIsApproved())) &&
+                (requirement.getKazakh() == null || userInfo.getKazakh() >= requirement.getKazakh()) &&
+                (requirement.getRussian() == null || userInfo.getRussian() >= requirement.getRussian()) &&
+                (!requirement.getIsCertificateRequired() || requirement.getEnglish() == null || userInfo.getEnglish() >= requirement.getEnglish()) &&
+                (eventDay.getParticipantLimit() > eventDay.getRegistrations().size());
+
     }
 
 }

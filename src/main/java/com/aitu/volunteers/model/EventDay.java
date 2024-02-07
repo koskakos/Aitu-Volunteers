@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Data
@@ -42,4 +44,8 @@ public class EventDay {
 
     @Column(name = "participant_limit")
     private Integer participantLimit;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "eventDay", cascade = CascadeType.ALL)
+    private List<EventRegistration> registrations = new LinkedList<>();
 }
