@@ -1,6 +1,7 @@
 package com.aitu.volunteers.controller;
 
 import com.aitu.volunteers.model.request.UserBanRequest;
+import com.aitu.volunteers.service.EventService;
 import com.aitu.volunteers.service.StorageService;
 import com.aitu.volunteers.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+    private final EventService eventService;
 
     private final StorageService storageService;
 
@@ -82,5 +84,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('APPROLE_Admin')")
     public ResponseEntity<?> isUserHasActiveBan(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.hasActiveBan(userService.getUserById(userId)));
+    }
+
+    @PostMapping("/{id}/cancel-all-registrations")
+    @PreAuthorize("hasAuthority('APPROLE_Admin')")
+    public ResponseEntity<?> cancelAllRegistrations(@PathVariable Long id) {
+        eventService.cancelAllRegistrationsForUser(userService.getUserById(id));
+        return ResponseEntity.ok("all registrations are canceled");
     }
 }

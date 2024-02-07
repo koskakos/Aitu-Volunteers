@@ -9,4 +9,6 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
     boolean existsByUserAndEventDay(User user, EventDay eventDay);
 
     void deleteByUserAndEventDay(User user, EventDay eventDay);
+
+    void deleteAllByUser(User user);
 }

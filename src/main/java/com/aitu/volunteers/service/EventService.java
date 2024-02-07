@@ -63,9 +63,9 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public EventRegistration registerUserForEventDay(User user, EventDay eventDay) {
+    public EventRegistration registerUserToEventDay(User user, EventDay eventDay) {
         if(eventRegistrationRepository.existsByUserAndEventDay(user, eventDay)) return null;
-        if(!canUserRegisterForEvent(user, eventDay)) return null;
+        if(!canUserRegisterToEvent(user, eventDay)) return null;
         EventRegistration eventRegistration = EventRegistration.builder()
                 .registrationDate(LocalDateTime.now())
                 .user(user)
@@ -76,12 +76,28 @@ public class EventService {
         return eventRegistrationRepository.save(eventRegistration);
     }
 
+    public EventDay setEventDayActivation(User user, EventDay eventDay, boolean isActive) {
+        if(!hasPermissionToEvent(user, eventDay.getEvent())) return null;
+        eventDay.setActive(isActive);
+        return eventDayRepository.save(eventDay);
+    }
+
+    // add the necessary roles
+    private boolean hasPermissionToEvent(User user, Event event) {
+        return user.getId().equals(event.getLeader().getId());
+    }
+
     @Transactional
-    public void unregisterUserForEventDay(User user, EventDay eventDay) {
+    public void unregisterUserToEventDay(User user, EventDay eventDay) {
         eventRegistrationRepository.deleteByUserAndEventDay(user, eventDay);
     }
 
-    public boolean canUserRegisterForEvent(User user, EventDay eventDay) {
+    @Transactional
+    public void cancelAllRegistrationsForUser(User user) {
+        eventRegistrationRepository.deleteAllByUser(user);
+    }
+
+    public boolean canUserRegisterToEvent(User user, EventDay eventDay) {
         if(userService.hasActiveBan(user)) return false;
         EventRequirement requirement = eventDay.getEvent().getRequirement();
         UserInfo userInfo = user.getUserInfo();

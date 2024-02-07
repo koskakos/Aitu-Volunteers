@@ -24,12 +24,18 @@ public class EventController {
 
     @PostMapping("/register/{eventDayId}")
     public ResponseEntity<?> registerForEventDay(@PathVariable Long eventDayId) {
-        return ResponseEntity.ok(eventService.registerUserForEventDay(userService.getAuthorizedUser(), eventService.getEventDayById(eventDayId)));
+        return ResponseEntity.ok(eventService.registerUserToEventDay(userService.getAuthorizedUser(), eventService.getEventDayById(eventDayId)));
     }
 
     @DeleteMapping("/register/{eventDayId}")
     public ResponseEntity<?> deleteRegistrationForEventDay(@PathVariable Long eventDayId) {
-        eventService.unregisterUserForEventDay(userService.getAuthorizedUser(), eventService.getEventDayById(eventDayId));
+        eventService.unregisterUserToEventDay(userService.getAuthorizedUser(), eventService.getEventDayById(eventDayId));
         return ResponseEntity.ok("unregistered");
+    }
+
+    @PostMapping("/activate-day/{eventDayId}")
+    public ResponseEntity<?> setEventDayActivation(@PathVariable Long eventDayId, @RequestParam("isActive") Boolean isActive) {
+        return ResponseEntity.ok(eventService.setEventDayActivation(userService.getAuthorizedUser(),
+                eventService.getEventDayById(eventDayId), isActive));
     }
 }

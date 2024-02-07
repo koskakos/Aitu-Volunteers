@@ -15,8 +15,8 @@ public class QrCodeService {
     public QrCode createQrCode() {
         QrCode qrCode = QrCode.builder()
                 .code(UUID.randomUUID().toString())
-                .isScanned(false)
+                .scanDate(null)
                 .build();
-        return qrCodeRepository.save(qrCode);
+        return qrCode;
     }
 }
