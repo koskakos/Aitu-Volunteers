@@ -30,6 +30,10 @@ public class EventService {
         return eventDayRepository.findEventDayById(id).orElseThrow();
     }
 
+    public EventRegistration getEventRegistrationByUserAndEventDay(User user, EventDay eventDay) {
+        return eventRegistrationRepository.findByUserAndEventDay(user, eventDay).orElseThrow();
+    }
+
     public Event createEvent(EventRequest eventRequest) {
         EventRequirementRequest requirementRequest = eventRequest.getRequirement();
         Event event = Event.builder()
@@ -111,4 +115,12 @@ public class EventService {
 
     }
 
+    public QrCode getStartQrByUserAndEventDay(User user, EventDay eventDay) {
+        return getEventRegistrationByUserAndEventDay(user, eventDay).getStartQr();
+    }
+
+
+    public QrCode getEndQrByUserAndEventDay(User user, EventDay eventDay) {
+        return getEventRegistrationByUserAndEventDay(user, eventDay).getEndQr();
+    }
 }

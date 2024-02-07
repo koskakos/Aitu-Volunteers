@@ -1,5 +1,6 @@
 package com.aitu.volunteers.controller;
 
+import com.aitu.volunteers.model.EventDay;
 import com.aitu.volunteers.model.request.EventRequest;
 import com.aitu.volunteers.service.EventService;
 import com.aitu.volunteers.service.UserService;
@@ -37,5 +38,19 @@ public class EventController {
     public ResponseEntity<?> setEventDayActivation(@PathVariable Long eventDayId, @RequestParam("isActive") Boolean isActive) {
         return ResponseEntity.ok(eventService.setEventDayActivation(userService.getAuthorizedUser(),
                 eventService.getEventDayById(eventDayId), isActive));
+    }
+
+    @GetMapping("/get-start-qr/{eventDayId}")
+    public ResponseEntity<?> getStartQr(@PathVariable Long eventDayId) {
+        EventDay eventDay = eventService.getEventDayById(eventDayId);
+        if(!eventDay.isActive()) return ResponseEntity.status(404).body("Event is not active");
+        return ResponseEntity.ok(eventService.getStartQrByUserAndEventDay(userService.getAuthorizedUser(), eventDay));
+    }
+
+    @GetMapping("/get-end-qr/{eventDayId}")
+    public ResponseEntity<?> getEndQr(@PathVariable Long eventDayId) {
+        EventDay eventDay = eventService.getEventDayById(eventDayId);
+        if(!eventDay.isActive()) return ResponseEntity.status(404).body("Event is not active");
+        return ResponseEntity.ok(eventService.getEndQrByUserAndEventDay(userService.getAuthorizedUser(), eventDay));
     }
 }
